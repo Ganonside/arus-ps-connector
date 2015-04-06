@@ -25,8 +25,10 @@
   },
   "homepage": "https://github.com/arus-project/arus-ps-connector",
   "dependencies": {
+    "axios": "^0.5.2",
     "babel": "^4.7.13",
     "babel-core": "^4.7.13",
+    "base-64": "^0.1.0",
     "moment": "^2.9.0",
     "superagent": "^0.21.0",
     "underscore": "^1.7.0",
