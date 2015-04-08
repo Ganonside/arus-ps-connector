@@ -1,6 +1,6 @@
 {
   "name": "arus-ps-connector",
-  "version": "0.8.2-alpha",
+  "version": "0.8.3-alpha",
   "description": "A PeopleSoft Connector for Arus",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/arus-project/arus-ps-connector",
   "dependencies": {
+    "axios": "^0.5.4",
     "babel": "^4.7.13",
     "babel-core": "^4.7.13",
     "moment": "^2.9.0",
