@@ -1,3 +1,5 @@
+process.env.NODE_ENV='test';
+
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import config from '../config.js';
@@ -10,6 +12,8 @@ chai.should();
 chai.use(chaiAsPromised);
 
 describe('Profile', () => {
+  console.log(process.env.USERNAME, process.env.PASSWORD);
+  console.log(process.env.PROFILE_URL);
   describe('#getProfile', () => {
     let params = {
       url: config.get('getProfileUrl'),
@@ -68,3 +72,5 @@ describe('Profile', () => {
     });
   });
 });
+
+process.env.NODE_ENV='';

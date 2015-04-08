@@ -1,6 +1,6 @@
 {
   "name": "arus-ps-connector",
-  "version": "0.8.3-alpha",
+  "version": "0.8.6-alpha",
   "description": "A PeopleSoft Connector for Arus",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,7 @@
     "axios": "^0.5.4",
     "babel": "^4.7.13",
     "babel-core": "^4.7.13",
+    "base-64": "^0.1.0",
     "moment": "^2.9.0",
     "superagent": "^0.21.0",
     "underscore": "^1.7.0",

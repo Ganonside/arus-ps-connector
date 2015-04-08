@@ -1,7 +1,6 @@
 import { parseString } from 'xml2js';
 import { getCached, setCached } from './cache.js';
 
-import config from '../../config.js';
 import Request from './Request.js';
 import Serializer from './Serializer.js';
 
@@ -45,8 +44,8 @@ let ArusPSConnector = {
       };
     } catch (err) {
       defaults = {
-        url: config.get('getProfileUrl'),
-        auth: [config.get('username'), config.get('password')],
+        url: process.env.PROFILE_URL,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
         headers: undefined
       };
     }
@@ -121,8 +120,8 @@ let ArusPSConnector = {
       };
     } catch (err) {
       defaults = {
-        url: config.get('getPictureUrl'),
-        auth: [config.get('username'), config.get('password')],
+        url: process.env.PICTURE_URL,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
         headers: undefined
       };
     }
@@ -183,8 +182,8 @@ let ArusPSConnector = {
       };
     } catch (err) {
       defaults = {
-        url: config.get('getScheduleUrl'),
-        auth: [config.get('username'), config.get('password')],
+        url: process.env.SCHEDULE_URL,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
         send: undefined,
         headers: undefined
       };
@@ -269,8 +268,8 @@ let ArusPSConnector = {
       };
     } catch (err) {
       defaults = {
-        url: config.get('getSubjectsUrl'),
-        auth: [config.get('username'), config.get('password')],
+        url: process.env.SUBJECTS_URL,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
         send: undefined,
         headers: undefined
       };
@@ -337,8 +336,8 @@ let ArusPSConnector = {
       };
     } catch (err) {
       defaults = {
-        url: config.get('getCoursesUrl'),
-        auth: [config.get('username'), config.get('password')],
+        url: process.env.COURSES_URL,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
         send: undefined,
         headers: undefined
       };
@@ -394,8 +393,8 @@ let ArusPSConnector = {
       };
     } catch (err) {
       defaults = {
-        url: config.get('getNotificationsUrl'),
-        auth: [config.get('username'), config.get('password')],
+        url: process.env.NOTIFICATIONS_URL,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
         send: undefined,
         headers: undefined
       };
@@ -459,8 +458,8 @@ let ArusPSConnector = {
       };
     } catch (err) {
       defaults = {
-        url: config.get('getNotificationEventsUrl'),
-        auth: [config.get('username'), config.get('password')],
+        url: process.env.EVENTS_URL,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
         send: undefined,
         headers: undefined
       };
@@ -528,8 +527,8 @@ let ArusPSConnector = {
       };
     } catch (err) {
       defaults = {
-        url: config.get('markAsReadUrl'),
-        auth: [config.get('username'), config.get('password')],
+        url: process.env.MARK_AS_READ_URL,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
         send: undefined,
         headers: undefined
       };
