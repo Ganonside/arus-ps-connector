@@ -12,8 +12,6 @@ chai.should();
 chai.use(chaiAsPromised);
 
 describe('Profile', () => {
-  console.log(process.env.USERNAME, process.env.PASSWORD);
-  console.log(process.env.PROFILE_URL);
   describe('#getProfile', () => {
     let params = {
       url: config.get('getProfileUrl'),

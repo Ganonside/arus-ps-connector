@@ -13,8 +13,8 @@ class Subjects {
 
   static create(obj) {
     let subjects = [];
-    if (_.isArray(obj.ssrGetCoursesResp.courseSearchResult.subjects)) {
-      obj.ssrGetCoursesResp.courseSearchResult.subjects.map(subject => {
+    if (_.isArray(obj.ssrGetCoursesResp.courseSearchResult.subjects.subject)) {
+      obj.ssrGetCoursesResp.courseSearchResult.subjects.subject.map(subject => {
         subjects.push(new Subject(subject));
       });
     } else {
