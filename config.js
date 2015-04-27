@@ -63,6 +63,11 @@ var conf = convict({
     doc: 'The REST Endpoint to mark a notification as read',
     default: '',
     env: 'CHANGE_READ_STATUS_URL'
+  },
+  getLovUrl: {
+    doc: 'The RESt Endpoint to get a List of Values response',
+    default: '',
+    env: 'LOV_URL'
   }
 });
 

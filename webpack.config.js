@@ -22,7 +22,8 @@ var commonConfig = {
       '__SCHEDULE_URL__': JSON.stringify(config.get('getScheduleUrl')),
       '__NOTIFICATIONS_URL__': JSON.stringify(config.get('getNotificationsUrl')),
       '__EVENTS_URL__': JSON.stringify(config.get('getNotificationEventsUrl')),
-      '__CHANGE_READ_STATUS_URL__': JSON.stringify(config.get('changeReadStatusUrl'))
+      '__CHANGE_READ_STATUS_URL__': JSON.stringify(config.get('changeReadStatusUrl')),
+      '__LOV_URL__': JSON.stringify(config.get('getLovUrl'))
     })
   ]
 };

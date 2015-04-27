@@ -4,7 +4,7 @@ import config from '../config.js';
 
 import Request from '../lib/js/Request.js';
 import ArusPSConnector from '../lib/js/index.js';
-import Subjects from '../lib/js/models/Subjects.js'
+import Subjects from '../lib/js/models/Subjects.js';
 
 let expect = chai.expect;
 chai.should();

@@ -8,6 +8,7 @@ import Subjects from './models/Subjects.js';
 import Courses from './models/Courses.js';
 import Notification from './models/Notification.js';
 import NtfEvent from './models/NtfEvent.js';
+import Lov from './models/Lov.js';
 /* eslint-enable */
 import serialize from './Serialize.js';
 /**
@@ -117,6 +118,14 @@ class Serializer {
     return events;
   }
 
+  static lovs(lovData, model = Lov) {
+    let lovs = [];
+    lovs = lovData.SCC_LOV_RESP.LOVS[0].LOV.map((lov) => {
+      return model.create(serialize(lov.VALUES[0]), lov.$.name);
+    });
+
+    return lovs;
+  }
 }
 
 module.exports = Serializer;

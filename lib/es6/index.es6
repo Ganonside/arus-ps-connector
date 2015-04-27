@@ -563,6 +563,165 @@ let ArusPSConnector = {
           reject(err);
         });
     });
+  },
+
+  getLov(requestParams, model, fieldname, recordname, keys) {
+
+    let defaults;
+    try {
+      defaults = {
+        url: __LOV_URL__,
+        auth: [__USERNAME__, __PASSWORD__],
+        send: undefined,
+        headers: undefined
+      };
+    } catch (err) {
+      defaults = {
+        url: process.env.LOV_URL,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
+        send: undefined,
+        headers: undefined
+      };
+    }
+
+    let params = defaults;
+    if (requestParams) {
+      Object.keys(defaults).map(key => params[key] = requestParams[key] || defaults[key]);
+    }
+
+    if (!params.send) {
+      if (typeof fieldname !== 'string') {
+        return Promise.reject(new TypeError(`Type of fieldname is ${typeof fieldname}. Expected an string\n\tfieldname = ${fieldname}`));
+      } else if (typeof recordname !== 'string') {
+        return Promise.reject(new TypeError(`Type of recordname is ${typeof recordname}. Expected an string\n\trecordname = ${recordname}`));
+      }
+
+      let keysStr = '';
+      if (keys) {
+        if (!Array.isArray(keys)) {
+          return Promise.reject(new TypeError(`Type of keys is ${typeof keys}. Expected an Array\n\tkeys = ${keys}`));
+        }
+
+        for (let i = 0; i < keys.length; ++i) {
+          keysStr += `<KEY><FIELDNAME>${keys[i].fieldname}</FIELDNAME><FIELDVALUE>${keys[i].fieldvalue}</FIELDVALUE></KEY>`;
+        }
+        if (!String.isEmpty(keysStr)) {
+          keysStr = `<KEYS>${keysStr}</KEYS>`;
+        }
+      }
+
+      params.send = `
+        <SCC_LOV_REQ>
+          <LOVS>
+            <LOV name='${fieldname}' sortby='CODE' sortorder='ASC' maxcount='300'>
+              <FIELDNAME>${fieldname}</FIELDNAME>
+              <RECORDNAME>${recordname}</RECORDNAME>
+              ${keysStr}
+            </LOV>
+          </LOVS>
+        </SCC_LOV_REQ>`;
+
+      return new Promise((resolve, reject) => {
+        Request.post(params)
+          .then((res) => {
+            let jRes;
+            parseString(res.data, (err, parsedRes) => {
+              if (!err) {
+                jRes = parsedRes;
+              } else {
+                reject(err);
+              }
+            });
+
+            let lov = Serializer.lovs(jRes, model);
+
+            resolve(lov);
+          })
+          .catch(reject);
+      });
+    }
+  },
+
+  getLovs(requestParams, model, lovParams) {
+
+    let defaults;
+    try {
+      defaults = {
+        url: __LOV_URL__,
+        auth: [__USERNAME__, __PASSWORD__],
+        send: undefined,
+        headers: undefined
+      };
+    } catch (err) {
+      defaults = {
+        url: process.env.LOV_URL,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
+        send: undefined,
+        headers: undefined
+      };
+    }
+
+    let params = defaults;
+    if (requestParams) {
+      Object.keys(defaults).map(key => params[key] = requestParams[key] || defaults[key]);
+    }
+
+    if (!params.send) {
+      if (!Array.isArray(lovParams)) {
+        return Promise.reject(new TypeError(`Type of lovParams is ${typeof lovParams}. Expected an Array\n\tlovParams = ${lovParams}`));
+      }
+
+      let lovsStr = '<LOVS>';
+      for (let i = 0; i < lovParams.length; ++i) {
+        let { fieldname, recordname, keys, sortby, sortorder, maxcount } = lovParams[i];
+
+        let keysStr = '';
+        if (keys) {
+          if (!Array.isArray(keys)) {
+            return Promise.reject(new TypeError(`Type of keys is ${typeof keys}. Expected an Array\n\tkeys = ${keys}`));
+          }
+
+          for (let j = 0; j < keys.length; ++j) {
+            keysStr += `<KEY><FIELDNAME>${keys[j].fieldname}</FIELDNAME><FIELDVALUE>${keys[j].fieldvalue}</FIELDVALUE></KEY>`;
+          }
+          if (!String.isEmpty(keysStr)) {
+            keysStr = `<KEYS>${keysStr}</KEYS>`;
+          }
+        }
+
+        lovsStr += `
+          <LOV name='${fieldname}' sortby='${sortby || 'CODE'}' sortorder='${sortorder || 'ASC'}' maxcount='${maxcount || 300}'>
+            <FIELDNAME>${fieldname}</FIELDNAME>
+            <RECORDNAME>${recordname}</RECORDNAME>
+            ${keysStr}
+          </LOV>`;
+      }
+      lovsStr += '</LOVS>';
+
+      params.send = `
+        <SCC_LOV_REQ>
+          ${lovsStr}
+        </SCC_LOV_REQ>`;
+    }
+
+    return new Promise((resolve, reject) => {
+      Request.post(params)
+        .then(res => {
+          let jRes;
+          parseString(res.data, (err, parsedRes) => {
+            if (!err) {
+              jRes = parsedRes;
+            } else {
+              reject(err);
+            }
+          });
+
+          let lov = Serializer.lovs(jRes, model);
+
+          resolve(lov);
+        })
+        .catch(reject);
+    });
   }
 };
 
