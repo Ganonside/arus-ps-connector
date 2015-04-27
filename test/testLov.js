@@ -65,7 +65,7 @@ describe.only('Lov', () => {
     it('should return an array of instances of Lov', () => {
       let resp = new Promise((resolve, reject) => {
         ArusPSConnector.getLovs(params, Lov, lovs)
-          .then((res) => {
+          .then((res) => {git
             resolve(res[0]);
           })
           .catch(reject);
