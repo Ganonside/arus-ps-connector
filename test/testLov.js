@@ -9,24 +9,11 @@ import Lov from '../lib/js/models/Lov.js';
 let should = chai.should();
 chai.use(chaiAsPromised);
 
-describe.only('Lov', () => {
+describe('Lov', () => {
   let params = {
     url: config.get('getLovUrl'),
-    auth: [config.get('username'), 'Bearcat15']
+    auth: [config.get('username'), config.get('password')]
   };
-
-  describe('getLov', () => {
-    it('should be fulfilled', () => {
-      let resp = new Promise((resolve, reject) => {
-        ArusPSConnector.getLov(params, Lov, 'STRM', 'TERM_TBL')
-          .then(resolve)
-          .catch(err => {
-            console.log(err.stack);
-          });
-      });
-      return resp.should.be.fulfilled;
-    });
-  });
 
   describe('getLovs', () => {
     let lovs = [{
@@ -36,8 +23,9 @@ describe.only('Lov', () => {
       sortorder: 'ASC',
       maxcount: 300
     }, {
+      lovName: 'CreditLevel',
       recordname: 'ACAD_CAR_TBL',
-      fieldname: 'ACAD_CAREER',
+      fieldname: 'ACAD_CAREER'
     }];
 
     it('should be fulfilled', () => {
@@ -65,7 +53,7 @@ describe.only('Lov', () => {
     it('should return an array of instances of Lov', () => {
       let resp = new Promise((resolve, reject) => {
         ArusPSConnector.getLovs(params, Lov, lovs)
-          .then((res) => {git
+          .then((res) => {
             resolve(res[0]);
           })
           .catch(reject);

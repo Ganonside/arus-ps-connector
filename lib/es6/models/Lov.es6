@@ -1,4 +1,4 @@
-import _ from 'underscore';
+
 
 class Lov {
 
