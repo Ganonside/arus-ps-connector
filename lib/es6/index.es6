@@ -640,7 +640,7 @@ let ArusPSConnector = {
           });
 
           let lov = Serializer.lovs(jRes, model);
-
+          
           resolve(lov);
         })
         .catch(reject);
