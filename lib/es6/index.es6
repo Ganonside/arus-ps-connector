@@ -607,7 +607,7 @@ let ArusPSConnector = {
           for (let j = 0; j < keys.length; ++j) {
             keysStr += `<KEY><FIELDNAME>${keys[j].fieldname}</FIELDNAME><FIELDVALUE>${keys[j].fieldvalue}</FIELDVALUE></KEY>`;
           }
-          if (!String.isEmpty(keysStr)) {
+          if (keysStr !== '') {
             keysStr = `<KEYS>${keysStr}</KEYS>`;
           }
         }
@@ -640,7 +640,7 @@ let ArusPSConnector = {
           });
 
           let lov = Serializer.lovs(jRes, model);
-          
+
           resolve(lov);
         })
         .catch(reject);
