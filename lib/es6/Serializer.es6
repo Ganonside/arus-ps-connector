@@ -6,6 +6,7 @@ import Picture from './models/Picture.js';
 import Schedule from './models/Schedule.js';
 import Subjects from './models/Subjects.js';
 import Courses from './models/Courses.js';
+import SearchResult from './models/SearchResult.js';
 import Notification from './models/Notification.js';
 import NtfEvent from './models/NtfEvent.js';
 import Lov from './models/Lov.js';
@@ -78,6 +79,10 @@ class Serializer {
 
   static courses(coursesData, model = Courses) {
     return model.create(serialize(coursesData));
+  }
+
+  static searchResult(searchResultData, model = SearchResult) {
+    return model.create(serialize(searchResultData));
   }
 
   /**

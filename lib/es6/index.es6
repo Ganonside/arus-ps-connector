@@ -372,6 +372,86 @@ let ArusPSConnector = {
     });
   },
 
+  searchClasses(requestParams, model, searchParams) {
+
+    if (typeof requestParams !== 'object') {
+      return Promise.reject(new TypeError(`Type of requestParams is ${typeof requestParams}. Expected an object\n\trequestParams = ${requestParams}`));
+    } else if (model !== undefined && typeof model !== 'function') {
+      return Promise.reject(new TypeError(`Type of model is ${typeof model}. Expected a function\n\tmodel = ${model}`));
+    }
+
+    let defaults;
+    try {
+      defaults = {
+        url: __CLASS_SEARCH_URL__,
+        auth: [__USERNAME__, __PASSWORD__],
+        send: undefined,
+        headers: undefined
+      };
+    } catch (err) {
+      defaults = {
+        url: process.env.CLASS_SEARCH_URL,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
+        send: undefined,
+        headers: undefined
+      };
+    }
+
+    let params = defaults;
+    if (requestParams) {
+      Object.keys(defaults).map((key) => params[key] = requestParams[key] || defaults[key]);
+    }
+
+    if (!params.send) {
+
+      if (typeof searchParams !== 'object') {
+        return Promise.reject(new TypeError(`Type of searchParams is ${typeof searchParams}. Expected an object\n\tsearchParams = ${searchParams}`));
+      }
+
+      params.send = `<SSR_GET_CLASSES_REQ>
+  <CLASS_SEARCH_REQUEST>
+    <INSTITUTION>${searchParams.institution || 'UCINN'}</INSTITUTION>
+    <STRM>${searchParams.strm || ''}</STRM>
+    <SESSION_CODE>${searchParams.sessionCode || ''}</SESSION_CODE>
+    <DESCR>${searchParams.descr || ''}</DESCR>
+    <SUBJECT>${searchParams.subject || ''}</SUBJECT>
+    <CAMPUS>${searchParams.campus || ''}</CAMPUS>
+    <ACAD_CAREER>${searchParams.acadCareer || ''}</ACAD_CAREER>
+    <SSR_COMPONENT>${searchParams.ssrComponent || ''}</SSR_COMPONENT>
+    <MEETING_TIME_START>${searchParams.meetingTimeStart || ''}</MEETING_TIME_START>
+    <MEETING_TIME_END>${searchParams.meetingTimeEnd || ''}</MEETING_TIME_END>
+    <MON>${searchParams.mon || 'N'}</MON>
+    <TUES>${searchParams.tues || 'N'}</TUES>
+    <WED>${searchParams.wed || 'N'}</WED>
+    <THURS>${searchParams.thurs || 'N'}</THURS>
+    <FRI>${searchParams.fri || 'N'}</FRI>
+    <SAT>${searchParams.sat || 'N'}</SAT>
+    <SUN>${searchParams.sun || 'N'}</SUN>
+    <INCLUDE_CLASS_DAYS>Y</INCLUDE_CLASS_DAYS>
+  </CLASS_SEARCH_REQUEST>
+</SSR_GET_CLASSES_REQ>`;
+    }
+
+    return new Promise((resolve, reject) => {
+      Request.post(params)
+        .then((res) => {
+          let jRes;
+          parseString(res.data, (err, parsedRes) => {
+            if (!err) {
+              jRes = parsedRes;
+            } else {
+              reject(err);
+            }
+          });
+
+          let searchResult = Serializer.searchResult(jRes, model);
+
+          resolve(searchResult);
+        })
+        .catch(reject);
+    });
+  },
+
   /**
    * Retrieves Notification info
    *
