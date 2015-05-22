@@ -44,12 +44,21 @@ gulp.task('setChangedEs6', function() {
  * Transpiles the `.es6` files into javascript and gives them the extension `.js`
  */
 gulp.task('transpileEs6', ['cleanSlate', 'setChangedEs6'], function() {
-  return gulp.src('./lib/es6/**/*.es6')
-    .pipe(babel())
-    .pipe(rename(function(srcpath) {
-      srcpath.extname = '.js';
-    }))
-    .pipe(gulp.dest('./lib/js'));
+
+  var transpiled;
+  try {
+    transpiled = gulp.src('./lib/es6/**/*.es6')
+      .pipe(babel())
+      .pipe(rename(function(srcpath) {
+        srcpath.extname = '.js';
+      }))
+      .pipe(gulp.dest('./lib/js'));
+  } catch (err) {
+    console.error('Transpile Error:\n\t', err);
+    transpiled = gulp.src('./lib/es6/**/*.es6', { read: false });
+  }
+
+  return transpiled;
 });
 
 /**
