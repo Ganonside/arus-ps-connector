@@ -10,6 +10,7 @@ class NtfEvent {
     let fields = {
     /* eslint-enable */
       id: this.id,
+      data: this.data,
       status: this.status,
       startDate: this.startDate,
       message: this.message
@@ -19,6 +20,7 @@ class NtfEvent {
   static create(obj) {
     let ntfEvent = {
       id: obj.sccNtfevtReqId,
+      data: obj.data,
       status: obj.sccNtfevtStatus,
       startDate: obj.sccNtfevtStartdt,
       message: obj.sccNtfevtMessage
