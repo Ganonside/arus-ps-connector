@@ -7,6 +7,7 @@ import Schedule from './models/Schedule.js';
 import Subjects from './models/Subjects.js';
 import Courses from './models/Courses.js';
 import Notification from './models/Notification.js';
+import NtfEvents from './models/NtfEvents.js';
 import NtfEvent from './models/NtfEvent.js';
 import Lov from './models/Lov.js';
 /* eslint-enable */
@@ -116,6 +117,18 @@ class Serializer {
     });
 
     return events;
+  }
+
+  /**
+   * Serializes data into an `Events` object
+   *
+   * @param {object} eventsData
+   * @param {function} model - a function that handles the mapping of the serialized data. It must
+   * have a `create` method. Defaults to `NtfEvent`
+   * @return {Array<model>} - returns an Array of `model` objects
+   */
+  static eventsCount(eventsData, model = NtfEvents) {
+    return model.create(serialize(eventsData.SCC_NTF_GET_EVENTS_RESP));
   }
 
   static lovs(lovData, model = Lov) {

@@ -498,9 +498,13 @@ let ArusPSConnector = {
             }
           });
 
+          let eventCounts = Serializer.eventsCount(jRes, model);
           let events = Serializer.events(jRes, model);
 
-          resolve(events);
+          let resp = { eventCounts: eventCounts, events: events};
+
+
+          resolve(resp);
         }).catch(err => {
           reject(err);
         });
