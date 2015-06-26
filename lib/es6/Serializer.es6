@@ -10,6 +10,7 @@ import Notification from './models/Notification.js';
 import NtfEvents from './models/NtfEvents.js';
 import NtfEvent from './models/NtfEvent.js';
 import Lov from './models/Lov.js';
+import UCIDLookup from './models/UCIDLookup.js';
 /* eslint-enable */
 import serialize from './Serialize.js';
 /**
@@ -129,6 +130,18 @@ class Serializer {
    */
   static eventsCount(eventsData, model = NtfEvents) {
     return model.create(serialize(eventsData.SCC_NTF_GET_EVENTS_RESP));
+  }
+
+  /**
+   * Serializes data into an `UCIDLookup` object
+   *
+   * @param {object} UCIDData
+   * @param {function} model - a function that handles the mapping of the serialized data. It must
+   * have a `create` method. Defaults to `UCIDData`
+   * @return {Array<model>} - returns an Array of `model` objects
+   */
+  static UCIDLookup(UCIDData, model = UCIDLookup) {
+    return model.create(serialize(UCIDData.UC_IT_PERSON_GET_RESP));
   }
 
   static lovs(lovData, model = Lov) {

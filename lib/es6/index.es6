@@ -569,6 +569,64 @@ let ArusPSConnector = {
     });
   },
 
+//TODO: update docs below
+  /**
+   * Retrieves a Profile Picture
+   *
+   * @method getPicture
+   * @static
+   * @params {Object} requestParams - an object containing the fields needed to
+   * build the remote request
+   * @example
+   * {
+   *   url: 'someUrl',
+   *   auth: ['username', 'password'],
+   *   acceptType: 'application/json',
+   *   send: dataToSend,
+   *   headers: objectContainingHeaders
+   * }
+   * @return {Promise} - returns a Promise of a serialized remote request response
+   */
+  UCIDLookup(requestParams, model, searchTerm) {
+
+    let defaults;
+    try {
+      defaults = {
+        url: __LOOKUP_UCID_URL__ + searchTerm,
+        auth: [__USERNAME__, __PASSWORD__],
+        headers: undefined
+      };
+    } catch (err) {
+      defaults = {
+        url: process.env.LOOKUP_UCID_URL + searchTerm,
+        auth: [process.env.USERNAME, process.env.PASSWORD],
+        headers: undefined
+      };
+    }
+
+    let params = defaults;
+
+    return new Promise((resolve, reject) => {
+      Request.get(params)
+        .then(res => {
+
+          let jRes;
+          parseString(res.data, (err, parsedRes) => {
+            if (!err) {
+              jRes = parsedRes;
+            } else {
+              reject(err);
+            }
+          });
+
+          let emplid = Serializer.UCIDLookup(jRes, model);
+          resolve(emplid);
+        }).catch(err => {
+          reject(err);
+        });
+    });
+  },
+
   getLovs(requestParams, model, lovParams) {
 
     let defaults;
