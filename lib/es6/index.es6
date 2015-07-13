@@ -250,9 +250,13 @@ let ArusPSConnector = {
             }
           });
 
-          let schedule = Serializer.schedule(jRes, ssrEnrlGetMode, model);
-
-          resolve(schedule);
+          let fault = interceptFault(jRes);
+          if (fault) {
+            resolve(Serializer.fault(jRes));
+          } else {
+            let schedule = Serializer.schedule(jRes, ssrEnrlGetMode, model);
+            resolve(schedule);
+          }
         }).catch(err => {
           reject(err);
         });

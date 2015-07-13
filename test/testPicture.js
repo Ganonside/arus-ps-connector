@@ -5,6 +5,7 @@ import config from '../config.js';
 import Request from '../lib/js/Request.js';
 import ArusPSConnector from '../lib/js/index.js';
 import Picture from '../lib/js/models/Picture.js';
+import Fault from '../lib/js/models/Fault.js';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -72,7 +73,7 @@ describe('Picture', () => {
     });
   });
 
-  describe.skip('Faults', () => {
+  describe('Faults', () => {
     /**
      * I don't know how to intentionally cause faults for this service
      */

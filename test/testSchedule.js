@@ -5,6 +5,7 @@ import config from '../config.js';
 import Request from '../lib/js/Request.js';
 import ArusPSConnector from '../lib/js/index.js';
 import Schedule from '../lib/js/models/Schedule.js';
+import Fault from '../lib/js/models/Fault.js';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -71,6 +72,48 @@ describe('Schedule', () => {
     it('should be rejected with a TypeError', () => {
       return ArusPSConnector.getSchedule(params, mode)
         .should.be.rejectedWith(TypeError);
+    });
+  });
+
+  describe('Faults', () => {
+    let mode = '';
+    let acadCareer = 'UGD';
+
+    let params = {
+      url: config.get('getScheduleUrl'),
+      auth: [config.get('username'), config.get('password')]
+    };
+
+    it('response promise should be fulfilled', () => {
+      return Request.post(params).should.eventually.be.fulfilled;
+    });
+
+    it('should return data', () => {
+      let resp = new Promise((resolve, reject) => {
+        Request.post(params)
+          .then((res) => {
+            resolve(res.data);
+          }).catch(reject);
+      });
+
+      return resp.should.not.become(undefined);
+    });
+
+    it('should return an instance of Fault', () => {
+      return ArusPSConnector.getSchedule(params, undefined, mode, acadCareer)
+        .should.eventually.be.an.instanceof(Fault);
+    });
+
+    it.skip('should display the Fault', () => {
+      let resp = new Promise((resolve, reject) => {
+        ArusPSConnector.getSchedule(params, undefined, mode, acadCareer)
+          .then((res) => {
+            console.log('Result: ', res);
+            resolve(res);
+          }).catch(reject);
+      });
+
+      return resp.should.eventually.be.fulfilled;
     });
   });
 });
