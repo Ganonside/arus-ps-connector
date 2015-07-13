@@ -8,6 +8,7 @@ import Serializer from './Serializer.js';
  * Checks if a response object is a Fault and returns it if it is
  */
 let interceptFault = (resp) => {
+  console.log(Object.keys(resp));
   /* gets the response's 2nd-level node */
   let body = resp[Object.keys(resp)[0]];
 

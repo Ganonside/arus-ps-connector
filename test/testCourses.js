@@ -91,7 +91,7 @@ describe('Courses', () => {
         .should.eventually.be.an.instanceof(Fault);
     });
 
-    it('should display the fault', () => {
+    it.skip('should display the fault', () => {
       let resp = new Promise((resolve, reject) => {
         ArusPSConnector.getCourses(params, undefined, subject, false, '')
           .then((res) => {
