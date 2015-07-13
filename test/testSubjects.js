@@ -20,35 +20,46 @@ describe('Subjects', () => {
       send: `<SSR_GET_COURSES_REQ><COURSE_SEARCH_REQUEST><INSTITUTION>${institution}</INSTITUTION><SUBJECT>${subject}</SUBJECT><SSR_CRS_SRCH_MODE>H</SSR_CRS_SRCH_MODE></COURSE_SEARCH_REQUEST></SSR_GET_COURSES_REQ>`
     };
 
-    it('response promise should be fulfilled', () => {
+    it('response promise should be fulfilled', function(done) {
+      this.timeout(25000);
 
       let resp = new Promise((resolve, reject) => {
         Request.post(params)
-          .then(res => {
-            resolve(res);
-          }).catch(reject);
+          .then(resolve)
+          .catch(reject);
       });
 
-      return resp.should.eventually.be.fulfilled;
+      resp.should.eventually.be.fulfilled.and.notify(done);
     });
 
-    it('should return data', () => {
+    it('should return data', function(done) {
+      this.timeout(25000);
+
       let resp = new Promise((resolve, reject) => {
         Request.post(params)
-          .then(res => {
-            resolve(res.data);
-          }).catch(reject);
+          .then((res) => {
+            if (res.data) {
+              resolve(res.data);
+            } else {
+              reject(new Error('\'data\' field was not found in \'res\' object'));
+            }
+          })
+          .catch(reject);
       });
 
-      return resp.should.not.become(undefined);
+      resp.should.eventually.be.fulfilled.and.notify(done);
     });
 
-    it('should return an instance of Subjects', () => {
-      return ArusPSConnector.getSubjects(params)
-        .should.eventually.be.an.instanceof(Subjects);
+    it('should return an instance of Subjects', function(done) {
+      this.timeout(25000);
+
+      ArusPSConnector.getSubjects(params)
+        .should.eventually.be.an.instanceof(Subjects).and.notify(done);
     });
 
-    it('should return an instance of passed in Model', () => {
+    it('should return an instance of passed in Model', function(done) {
+      this.timeout(25000);
+
       class SubjectsMock {
         constructor(obj) {
           Object.keys(obj).map(key => this[key] = obj[key]);
@@ -63,8 +74,8 @@ describe('Subjects', () => {
         }
       }
 
-      return ArusPSConnector.getSubjects(params, SubjectsMock)
-        .should.eventually.be.an.instanceof(SubjectsMock);
+      ArusPSConnector.getSubjects(params, SubjectsMock)
+        .should.eventually.be.an.instanceof(SubjectsMock).and.notify(done);
     });
 
     it('should reject with TypeError', () => {
