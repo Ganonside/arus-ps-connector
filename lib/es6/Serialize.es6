@@ -52,4 +52,4 @@ let toCamelCase = function(str) {
   return camelCase;
 };
 
-module.exports = serialize;
+export default serialize;

@@ -11,6 +11,7 @@ import NtfEvents from './models/NtfEvents.js';
 import NtfEvent from './models/NtfEvent.js';
 import Lov from './models/Lov.js';
 import UCIDLookup from './models/UCIDLookup.js';
+import Fault from './models/Fault.js';
 /* eslint-enable */
 import serialize from './Serialize.js';
 /**
@@ -151,6 +152,12 @@ class Serializer {
     });
 
     return lovs;
+  }
+
+  static fault(faultData, model = Fault) {
+    let fault = new model(serialize(faultData));
+
+    return fault;
   }
 }
 

@@ -4,6 +4,21 @@ import { getCached, setCached } from './cache.js';
 import Request from './Request.js';
 import Serializer from './Serializer.js';
 
+/**
+ * Checks if a response object is a Fault and returns it if it is
+ */
+let interceptFault = (resp) => {
+  /* gets the response's 2nd-level node */
+  let body = resp[Object.keys(resp)[0]];
+
+  if (body.IS_FAULT[0] && body.IS_FAULT[0] === 'Y') {
+    // return resp if it's a Fault
+    return resp;
+  } else {
+    // return false if resp isn't a Fault
+    return false;
+  }
+};
 
 // TODO: update jsdoc
 let ArusPSConnector = {
@@ -365,9 +380,13 @@ let ArusPSConnector = {
             }
           });
 
-          let courses = Serializer.courses(jRes, model);
-
-          resolve(courses);
+          let fault = interceptFault(jRes);
+          if (fault) {
+            resolve(Serializer.fault(jRes));
+          } else {
+            let courses = Serializer.courses(jRes, model);
+            resolve(courses);
+          }
         }).catch(reject);
     });
   },
