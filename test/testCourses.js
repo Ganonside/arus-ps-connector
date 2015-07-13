@@ -61,8 +61,8 @@ describe('Courses', () => {
     });
   });
 
-  describe.only('Fault', () => {
-    let institution = '';
+  describe('Faults', () => {
+    let institution = ' ';
     let subject = 'OM';
 
     let params = {

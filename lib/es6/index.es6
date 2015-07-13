@@ -588,7 +588,7 @@ let ArusPSConnector = {
     });
   },
 
-//TODO: update docs below
+  //TODO: update docs below
   /**
    * Retrieves a Profile Picture
    *
