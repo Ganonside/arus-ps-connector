@@ -1,5 +1,5 @@
 /**
- * Serves as the model for NtfEvent data
+ * Serves as the model for UCIDLookup data
  *
  * @class
  */

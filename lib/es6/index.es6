@@ -587,7 +587,7 @@ let ArusPSConnector = {
    * }
    * @return {Promise} - returns a Promise of a serialized remote request response
    */
-  UCIDLookup(requestParams, model, searchTerm) {
+  UCIDLookup(requestParams, searchTerm, model) {
 
     let defaults;
     try {
