@@ -89,10 +89,14 @@ let ArusPSConnector = {
             }
           });
 
-          // Serialize the http response to a profile
-          let profile = Serializer.profile(jRes, model);
-
-          resolve(profile);
+          let fault = interceptFault(jRes);
+          if (fault) {
+            resolve(Serializer.fault(jRes));
+          } else {
+            // Serialize the http response to a profile
+            let profile = Serializer.profile(jRes, model);
+            resolve(profile);
+          }
         }).catch(err => {
           reject(err);
         });
