@@ -24,11 +24,13 @@ describe('Events', () => {
     it('should return data', () => {
       let resp = new Promise((resolve, reject) => {
         Request.post(params)
-          .then(res => {
-            resolve(res.data);
-          }).catch(err => {
-            reject(err);
-          });
+          .then((res) => {
+            if (res.data) {
+              resolve(res.data);
+            } else {
+              reject(new Error('\'data\' field was not found in \'res\' object'));
+            }
+          }).catch(reject);
       });
 
       return resp.should.not.become(undefined);
@@ -38,7 +40,7 @@ describe('Events', () => {
       let resp = new Promise((resolve, reject) => {
         ArusPSConnector.getNotificationEvents(params)
           .then(res => {
-            resolve(res[0]);
+            resolve(res.events[0]);
           }).catch(err => {
             reject(err);
           });
@@ -66,7 +68,7 @@ describe('Events', () => {
       let resp = new Promise((resolve, reject) => {
         ArusPSConnector.getNotificationEvents(params, EventMock)
           .then(res => {
-            resolve(res[0]);
+            resolve(res.events[0]);
           }).catch(err => {
             reject(err);
           });
@@ -97,22 +99,22 @@ describe('Events', () => {
 
     let resp;
 
-    before((done) => {
+    before(function(done) {
       ArusPSConnector.getNotificationEvents(getParams)
-        .then(res => {
-          id = res[0].id;
-          oldStatus = res[0].status;
+        .then((res) => {
+          id = res.events[0].id;
+          oldStatus = res.events[0].status;
 
-          newStatus = oldStatus === 'U' ? 'R' : 'U';
+          newStatus = (oldStatus === 'U' ? 'R' : 'U');
           changeParams = {
             url: config.get('markAsReadUrl'),
             auth: [config.get('username'), config.get('password')],
             send: `<SCC_NTF_UPDATE_EVENTS_REQ><NUM_PAST_DAYS>7</NUM_PAST_DAYS><EVENTS><SCC_NTF_EVENT>	<SCC_NTFEVT_REQ_ID>${id}</SCC_NTFEVT_REQ_ID><SCC_NTFEVT_STATUS>${newStatus}</SCC_NTFEVT_STATUS></SCC_NTF_EVENT></EVENTS></SCC_NTF_UPDATE_EVENTS_REQ>`
           };
 
-          resp = new Promise((resolve) => {
+          resp = new Promise((resolve, reject) => {
             ArusPSConnector.changeReadStatus(changeParams)
-              .then(res2 => {
+              .then((res2) => {
                 resolve(res2);
                 done();
               }).catch(done);
@@ -128,9 +130,9 @@ describe('Events', () => {
       let changedStatus = new Promise((resolve, reject) => {
         ArusPSConnector.getNotificationEvents(getParams)
           .then(res => {
-            for (let i = 0; i < res.length; ++i) {
-              if (res[i].id === id) {
-                resolve(res[i].status);
+            for (let i = 0; i < res.events.length; ++i) {
+              if (res.events[i].id === id) {
+                resolve(res.events[i].status);
                 break;
               }
             }

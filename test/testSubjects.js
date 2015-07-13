@@ -44,7 +44,7 @@ describe('Subjects', () => {
               reject(new Error('\'data\' field was not found in \'res\' object'));
             }
           })
-          .catch(done);
+          .catch(reject);
       });
 
       resp.should.eventually.be.fulfilled.and.notify(done);
