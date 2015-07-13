@@ -169,9 +169,13 @@ let ArusPSConnector = {
             }
           });
 
-          let picture = Serializer.picture(jRes, model);
-
-          resolve(picture);
+          let fault = interceptFault(jRes);
+          if (fault) {
+            resolve(Serializer.fault(jRes));
+          } else {
+            let picture = Serializer.picture(jRes, model);
+            resolve(picture);
+          }
         }).catch(err => {
           reject(err);
         });

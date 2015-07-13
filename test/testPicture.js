@@ -71,4 +71,10 @@ describe('Picture', () => {
         .should.be.rejectedWith(TypeError);
     });
   });
+
+  describe.skip('Faults', () => {
+    /**
+     * I don't know how to intentionally cause faults for this service
+     */
+  });
 });
