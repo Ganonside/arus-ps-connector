@@ -541,13 +541,17 @@ let ArusPSConnector = {
             }
           });
 
-          let eventCounts = Serializer.eventsCount(jRes, model);
-          let events = Serializer.events(jRes, model);
+          let fault = interceptFault(jRes);
+          if (fault) {
+            resolve(Serializer.fault(jRes));
+          } else {
+            // TODO: make into one call
+            let eventCounts = Serializer.eventsCount(jRes, model);
+            let events = Serializer.events(jRes, model);
+            let resp = { eventCounts: eventCounts, events: events};
 
-          let resp = { eventCounts: eventCounts, events: events};
-
-
-          resolve(resp);
+            resolve(resp);
+          }
         }).catch(err => {
           reject(err);
         });
@@ -605,10 +609,22 @@ let ArusPSConnector = {
     return new Promise((resolve, reject) => {
       Request.post(params)
         .then(res => {
-          resolve(res);
-        }).catch(err => {
-          reject(err);
-        });
+          let jRes;
+          parseString(res.data, (err, parsedRes) => {
+            if (!err) {
+              jRes = parsedRes;
+            } else {
+              reject(err);
+            }
+          });
+
+          let fault = interceptFault(jRes);
+          if (fault) {
+            resolve(Serializer.fault(jRes));
+          } else {
+            resolve(res);
+          }
+        }).catch(reject);
     });
   },
 

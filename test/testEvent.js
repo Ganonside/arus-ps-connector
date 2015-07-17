@@ -5,6 +5,7 @@ import config from '../config.js';
 import Request from '../lib/js/Request.js';
 import ArusPSConnector from '../lib/js/index.js';
 import NtfEvent from '../lib/js/models/NtfEvent.js';
+import Fault from '../lib/js/models/Fault.js';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -158,6 +159,107 @@ describe('Events', () => {
         .then(() => {
           done();
         }).catch(done);
+    });
+  });
+
+  describe('Faults', () => {
+
+    describe('Get Events', () => {
+      let numPastDays = 'NAN';
+      let params = {
+        url: config.get('getNotificationEventsUrl'),
+        auth: [config.get('username'), config.get('password')],
+        send: `<SCC_NTF_GET_EVENTS_REQ_R><NUM_PAST_DAYS>${numPastDays}</NUM_PAST_DAYS><INCLUDE_EVENTS>Y</INCLUDE_EVENTS></SCC_NTF_GET_EVENTS_REQ_R>`
+      };
+
+      it('response promise should be fulfilled', () => {
+        return Request.post(params).should.eventually.be.fulfilled;
+      });
+
+      it('should return data', () => {
+        let resp = new Promise((resolve, reject) => {
+          Request.post(params)
+            .then((res) => {
+              resolve(res.data);
+            })
+            .catch(reject);
+        });
+
+        return resp.should.not.become(undefined);
+      });
+
+      it('should return an instance of Fault', () => {
+        let resp = new Promise((resolve, reject) => {
+          ArusPSConnector.getNotificationEvents(params, undefined, numPastDays, 'Y')
+            .then(resolve)
+            .catch(reject);
+        });
+
+        return resp.should.eventually.be.an.instanceof(Fault);
+      });
+
+      it.skip('run this to display the response', () => {
+        let resp = new Promise((resolve, reject) => {
+          ArusPSConnector.getNotificationEvents(params, undefined, numPastDays, 'Y')
+            .then((res) => {
+              console.log('Result: ', res);
+              resolve(res);
+            })
+            .catch(reject);
+        });
+
+        return resp.should.eventually.be.fulfilled;
+      });
+    });
+
+    describe('Change Read Status', () => {
+      let id = -1;
+      let status = 'U';
+      let numPastDays = 7;
+      let params = {
+        url: config.get('markAsReadUrl'),
+        auth: [config.get('username'), config.get('password')],
+        send: `<SCC_NTF_UPDATE_EVENTS_REQ><NUM_PAST_DAYS>${numPastDays}</NUM_PAST_DAYS><EVENTS><SCC_NTF_EVENT>	<SCC_NTFEVT_REQ_ID>${id}</SCC_NTFEVT_REQ_ID><SCC_NTFEVT_STATUS>${status}</SCC_NTFEVT_STATUS></SCC_NTF_EVENT></EVENTS></SCC_NTF_UPDATE_EVENTS_REQ>`
+      };
+
+      it('response promise should be fulfilled', () => {
+        return Request.post(params).should.eventually.be.fulfilled;
+      });
+
+      it('should return data', () => {
+        let resp = new Promise((resolve, reject) => {
+          Request.post(params)
+            .then((res) => {
+              resolve(res.data);
+            })
+            .catch(reject);
+        });
+
+        return resp.should.not.become(undefined);
+      });
+
+      it('should return an instance of Fault', () => {
+        let resp = new Promise((resolve, reject) => {
+          ArusPSConnector.changeReadStatus(params, id, status, numPastDays)
+            .then(resolve)
+            .catch(reject);
+        });
+
+        return resp.should.eventually.be.an.instanceof(Fault);
+      });
+
+      it.skip('run this to display the response', () => {
+        let resp = new Promise((resolve, reject) => {
+          ArusPSConnector.changeReadStatus(params, id, status, numPastDays)
+            .then((res) => {
+              console.log('Result: ', res);
+              resolve(res);
+            })
+            .catch(reject);
+        });
+
+        return resp.should.eventually.be.fulfilled;
+      });
     });
   });
 });

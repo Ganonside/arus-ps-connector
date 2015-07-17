@@ -114,7 +114,7 @@ class Serializer {
   static events(eventsData, model = NtfEvent) {
     let events = [];
 
-    events = _.map(eventsData.SCC_NTF_GET_EVENTS_RESP.SCC_NTF_EVENT, evt => {
+    events = _.map(eventsData.SCC_NTF_GET_EVENTS_RESP.SCC_NTF_EVENT, (evt) => {
       return model.create(serialize(evt));
     });
 
