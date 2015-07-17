@@ -14,6 +14,9 @@ let interceptFault = (resp) => {
   if (body.IS_FAULT && body.IS_FAULT[0] && body.IS_FAULT[0] === 'Y') {
     // return resp if it's a Fault
     return resp;
+  } else if (body.HEAD && body.HEAD[0] && body.HEAD[0].TITLE && body.HEAD[0].TITLE[0] === 'RESTListeningConnector') {
+    // this is also considered a Fault although it doesn't follow the same pattern as the others
+    return resp;
   } else {
     // return false if resp isn't a Fault
     return false;
