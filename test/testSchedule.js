@@ -115,7 +115,7 @@ describe('Schedule', () => {
         .should.eventually.be.an.instanceof(Fault);
     });
 
-    it.skip('should display the Fault', () => {
+    it.skip('run this to display the response', () => {
       let resp = new Promise((resolve, reject) => {
         ArusPSConnector.getSchedule(params, undefined, mode, acadCareer)
           .then((res) => {

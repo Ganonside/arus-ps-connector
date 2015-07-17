@@ -118,7 +118,7 @@ describe('Notifications', () => {
       return resp.should.eventually.be.an.instanceof(Fault);
     });
 
-    it.skip('should display the Fault', () => {
+    it.skip('run this to display the response', () => {
       let resp = new Promise((resolve, reject) => {
         ArusPSConnector.getNotifications(params)
           .then((res) => {
