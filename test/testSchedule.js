@@ -21,11 +21,16 @@ describe('Schedule', () => {
       acceptType: 'application/xml'
     };
 
-    it('should return ok', () => {
-      return Request.post(params).should.eventually.be.fulfilled;
+    it('should return ok', function(done) {
+      this.timeout(3000);
+
+      return Request.post(params).should.eventually.be.fulfilled
+        .and.notify(done);
     });
 
-    it('should return data', () => {
+    it('should return data', function(done) {
+      this.timeout(3000);
+
       let resp = new Promise((resolve, reject) => {
         Request.post(params)
           .then(res => {
@@ -35,15 +40,20 @@ describe('Schedule', () => {
           });
       });
 
-      return resp.should.not.become(undefined);
+      return resp.should.not.become(undefined)
+        .and.notify(done);
     });
 
-    it('should return instance of Schedule', () => {
+    it('should return instance of Schedule', function(done) {
+      this.timeout(3000);
+
       return ArusPSConnector.getSchedule(params)
-        .should.eventually.be.an.instanceof(Schedule);
+        .should.eventually.be.an.instanceof(Schedule)
+        .and.notify(done);
     });
 
-    it('should return an instance of passed in model', () => {
+    it('should return an instance of passed in model', function(done) {
+      this.timeout(3000);
 
       class ScheduleMock {
         contructor(fields) {
@@ -66,7 +76,8 @@ describe('Schedule', () => {
       }
 
       return ArusPSConnector.getSchedule(params, ScheduleMock, mode)
-        .should.eventually.be.an.instanceof(ScheduleMock);
+        .should.eventually.be.an.instanceof(ScheduleMock)
+        .and.notify(done);
     });
 
     it('should be rejected with a TypeError', () => {
