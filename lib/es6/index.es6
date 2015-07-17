@@ -465,7 +465,13 @@ let ArusPSConnector = {
             }
           });
 
-          let notifications = Serializer.notifications(jRes, model);
+          let fault = interceptFault(jRes);
+          if (fault) {
+            resolve(Serializer.fault(jRes));
+          } else {
+            let notifications = Serializer.notifications(jRes, model);
+            resolve(notifications);
+          }
 
           resolve(notifications);
         }).catch(err => {
