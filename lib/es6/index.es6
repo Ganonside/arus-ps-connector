@@ -760,9 +760,13 @@ let ArusPSConnector = {
             }
           });
 
-          let lov = Serializer.lovs(jRes, model);
-
-          resolve(lov);
+          let fault = interceptFault(jRes);
+          if (fault) {
+            resolve(Serializer.fault(jRes));
+          } else {
+            let lov = Serializer.lovs(jRes, model);
+            resolve(lov);
+          }
         })
         .catch(reject);
     });
