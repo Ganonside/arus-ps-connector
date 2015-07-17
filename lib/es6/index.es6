@@ -324,7 +324,13 @@ let ArusPSConnector = {
             }
           });
 
-          let subjects = Serializer.subjects(jRes, model);
+          let fault = interceptFault(jRes);
+          if (fault) {
+            resolve(Serializer.fault(jRes));
+          } else {
+            let subjects = Serializer.subjects(jRes, model);
+            resolve(subjects);
+          }
 
           resolve(subjects);
         }).catch(err => {
